@@ -1,17 +1,13 @@
 import Image from 'next/image'
 
-function BillBoard() {
+function Banner() {
   return (
     <div className="md:w-1/2">
       <div className="absolute top-0 left-0 -z-10 h-screen w-full">
-        {/* <Image src="https://rb.gy/es4llu" layout="fill" objectFit="cover" /> */}
-        <img
-          src="https://i.pinimg.com/originals/a1/f1/cb/a1f1cbf987bc1e6d6211270ff4071d09.jpg"
-          className="absolute h-full w-full object-cover"
-        />
+        <Image src="https://rb.gy/es4llu" layout="fill" objectFit="cover" />
       </div>
-      <div className="pl-7 lg:pl-14">
-        <h1 className="text-3xl font-bold">I LOVE YOU SO MUCH</h1>
+      <div>
+        <h1 className="text-3xl font-bold">The Avenger</h1>
         <div className="mt-1 flex space-x-1 text-[11px]">
           <span className="text-gray-500">Genre:</span>
           <p>Epic,</p>
@@ -34,4 +30,4 @@ function BillBoard() {
   )
 }
 
-export default BillBoard
+export default Banner
