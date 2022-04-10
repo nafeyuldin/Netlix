@@ -11,7 +11,7 @@ interface Inputs {
 
 function Login() {
   const [login, setLogin] = useState(false)
-  const { signIn, signUp, error, loading, user, logout } = useAuth()
+  const { signIn, signUp } = useAuth()
 
   const {
     register,
@@ -42,12 +42,7 @@ function Login() {
         objectFit="cover"
       />
       <div className="absolute left-2 top-1 h-20 w-44 cursor-pointer md:left-8 md:top-4">
-        <Image
-          src="https://rb.gy/cnm6ax"
-          alt=""
-          layout="fill"
-          objectFit="contain"
-        />
+        <Image src="https://rb.gy/ek4j9f" layout="fill" objectFit="contain" />
       </div>
 
       <form

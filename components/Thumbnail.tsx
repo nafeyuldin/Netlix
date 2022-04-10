@@ -1,30 +1,30 @@
-import { IoMdHeart, IoMdHeartEmpty } from 'react-icons/io'
+import Image from 'next/image'
+import { useRecoilState } from 'recoil'
+import { modalState, movieState } from '../atoms/modalAtom.'
+import { Movie } from '../typings'
 
-const BASE_URL = 'https://image.tmdb.org/t/p/original/'
+interface Props {
+  movie: Movie
+  index: number
+}
 
-function Thumbnail({ movie, genres }) {
-  console.log(movie)
+function Thumbnail({ movie, index }: Props) {
+  const [currentMovie, setCurrentMovie] = useRecoilState(movieState)
+  const [showModal, setShowModal] = useRecoilState(modalState)
+
   return (
-    <div className="hoverAnimation relative">
-      <img
-        src={`${BASE_URL}${movie.poster_path}`}
-        alt=""
-        className="h-72 min-w-[220px] object-cover opacity-70"
+    <div
+      className={`relative h-32 min-w-[230px] cursor-pointer transition duration-200 ease-out hover:scale-105`}
+      onClick={() => {
+        setCurrentMovie(movie)
+        setShowModal(true)
+      }}
+    >
+      <Image
+        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+        className="rounded object-cover"
+        layout="fill"
       />
-      <div className="absolute bottom-0 flex w-full items-center justify-between p-2">
-        <div className="text-[11px]">
-          <p>
-            {genres
-              .filter((genre) => movie.genre_ids.includes(genre.id))
-              .map((filteredGenre) => (
-                <span key={filteredGenre.id}>{filteredGenre.name}</span>
-              ))}
-          </p>
-          <p>{movie.vote_count} votes</p>
-        </div>
-        <IoMdHeartEmpty className="h-5 w-5" />
-        {/* <IoMdHeart className="h-5 w-5" /> */}
-      </div>
     </div>
   )
 }

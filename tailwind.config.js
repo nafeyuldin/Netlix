@@ -5,12 +5,10 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    fontFamily: {
-      body: ['Open Sans', 'sans-serif'],
-    },
   },
   plugins: [
     require('tailwind-scrollbar-hide'),
+    require('tailwind-scrollbar'),
     require('@tailwindcss/line-clamp'),
   ],
 }

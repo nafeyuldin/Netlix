@@ -1,31 +1,54 @@
+import { InformationCircleIcon } from '@heroicons/react/outline'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { baseUrl } from '../constants/movie'
+import { Movie } from '../typings'
+import { FaPlay } from 'react-icons/fa'
+import { modalState, movieState } from '../atoms/modalAtom.'
+import { useRecoilState } from 'recoil'
 
-function Banner() {
+interface Props {
+  netflixOriginals: Movie[]
+}
+
+function Banner({ netflixOriginals }: Props) {
+  const [movie, setMovie] = useState({} as Movie)
+  const [currentMovie, setCurrentMovie] = useRecoilState(movieState)
+  const [showModal, setShowModal] = useRecoilState(modalState)
+
+  useEffect(() => {
+    setMovie(
+      netflixOriginals[Math.floor(Math.random() * netflixOriginals.length - 1)]
+    )
+  }, [netflixOriginals])
+
   return (
-    <div className="md:w-1/2">
-      <div className="absolute top-0 left-0 -z-10 h-screen w-full">
-        <Image src="https://rb.gy/es4llu" layout="fill" objectFit="cover" />
-      </div>
-      <div>
-        <h1 className="text-3xl font-bold">The Avenger</h1>
-        <div className="mt-1 flex space-x-1 text-[11px]">
-          <span className="text-gray-500">Genre:</span>
-          <p>Epic,</p>
-          <p>Fantasy,</p>
-          <p>Superpower</p>
-        </div>
-        <p className="mt-4 max-w-md text-xs text-[13px] line-clamp-5 md:line-clamp-none">
-          Nick Fury, the director of the espionage agency known as S.H.I.E.L.D.
-          arrives at Project P.E.G.A.S.U.S., a remote research facility, during
-          an evacuation. His second-in-command, Maria Hill, explains that the
-          Tesseract, an self-sustaining energy source of unknown potential, has
-          activated and opened a portal through space, from which the exiled
-          Asgardian prince Loki, steps through .... <a>Read more</a>
-        </p>
-        <button className="mt-8 rounded-full bg-rose-600 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-rose-700">
-          Watch now
+    <div className="flex h-[80vh] flex-col justify-end space-y-4">
+      <img
+        src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
+        className="absolute top-0 left-0 -z-10 h-screen w-screen object-cover"
+      />
+      <h1 className="text-5xl font-bold">
+        {movie?.title || movie?.name || movie?.original_name}
+      </h1>
+      <p className="max-w-2xl text-xl">{movie?.overview}</p>
+      <div className="flex space-x-3">
+        <button className="flex items-center gap-x-2 rounded bg-white px-8 py-2.5 text-lg font-semibold text-black transition hover:opacity-75">
+          <FaPlay className="h-6 w-6 text-black" />
+          Play
+        </button>
+        <button
+          className="flex items-center gap-x-2 rounded bg-[gray]/70 px-8 py-2.5 text-lg font-semibold transition hover:opacity-75"
+          onClick={() => {
+            setCurrentMovie(movie)
+            setShowModal(true)
+          }}
+        >
+          <InformationCircleIcon className="h-7 w-7" /> More Info
         </button>
       </div>
+
+      {/* <div className="h-28 bg-gradient-to-b from-transparent to-[#252525]" /> */}
     </div>
   )
 }

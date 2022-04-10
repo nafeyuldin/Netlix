@@ -5,6 +5,7 @@ import {
   signOut,
   User,
 } from 'firebase/auth'
+
 import { useRouter } from 'next/router'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { auth } from '../firebase'
@@ -44,9 +45,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (user) {
           // Logged in...
           setUser(user)
+          setLoading(false)
         } else {
           // Not logged in...
           setUser(null)
+          setLoading(true)
+          router.push('/login')
         }
 
         setInitialLoading(false)
@@ -60,9 +64,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user)
+        router.push('/')
         setLoading(false)
       })
-      .catch((error) => setError(error.message))
+      .catch((error) => alert(error.message))
       .finally(() => setLoading(false))
   }
 
@@ -71,6 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user)
+        router.push('/')
         setLoading(false)
       })
       .catch((error) => alert(error.message))
@@ -81,8 +87,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(true)
 
     signOut(auth)
-      .then(() => router.push('/'))
-      .catch((error) => setError(error))
+      .then(() => {
+        setUser(null)
+      })
+      .catch((error) => alert(error.message))
       .finally(() => setLoading(false))
   }
 

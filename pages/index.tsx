@@ -1,23 +1,55 @@
+import { getProducts, Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
+import { useRecoilValue } from 'recoil'
+import { modalState } from '../atoms/modalAtom.'
 import Banner from '../components/Banner'
 import Header from '../components/Header'
-import Login from '../components/Login'
-import NowPlaying from '../components/NowPlaying'
-import TopRated from '../components/TopRated'
-import Trending from '../components/Trending'
+import Modal from '../components/Modal'
+import Plans from '../components/Plans'
+import Row from '../components/Row'
 import useAuth from '../hooks/useAuth'
+import useSubscription from '../hooks/useSubscription'
+import payments from '../lib/stripe'
+import { Movie } from '../typings'
+import requests from '../utils/requests'
 
 interface Props {
-  trending: Array<any>
+  netflixOriginals: Movie[]
+  trendingNow: Movie[]
+  topRated: Movie[]
+  actionMovies: Movie[]
+  comedyMovies: Movie[]
+  horrorMovies: Movie[]
+  romanceMovies: Movie[]
+  documentaries: Movie[]
+  products: Product[]
 }
 
-const Home = ({ trending, nowPlaying, topRated, genres }: Props) => {
-  const { user } = useAuth()
-  if (!user) return <Login />
+const Home = ({
+  netflixOriginals,
+  actionMovies,
+  comedyMovies,
+  documentaries,
+  horrorMovies,
+  romanceMovies,
+  topRated,
+  trendingNow,
+}: Props) => {
+  const { user, loading } = useAuth()
+  const subscription = useSubscription(user)
+  const showModal = useRecoilValue(modalState)
 
-  console.log(genres)
+  if (loading || subscription === null) return null
+  console.log(subscription)
+
+  if (!subscription) return <Plans />
+
   return (
-    <div className="relative h-screen bg-gradient-to-b from-gray-900/10 to-[#010511]">
+    <div
+      className={`relative h-screen bg-gradient-to-b from-gray-900/10 to-[#010511] ${
+        showModal && 'overflow-hidden'
+      }`}
+    >
       <Head>
         <title>Home - Netflix</title>
         <link rel="icon" href="/favicon.ico" />
@@ -25,18 +57,20 @@ const Home = ({ trending, nowPlaying, topRated, genres }: Props) => {
 
       <Header />
 
-      <main className="space-y-12 pl-7 pb-24 lg:pl-12">
-        <section className="flex h-[650px] flex-col justify-between md:flex-row md:items-end md:px-2">
-          <Banner />
-          <Trending trending={trending} />
-        </section>
+      <main className="space-y-20 pl-7 pb-24 lg:pl-12 ">
+        <Banner netflixOriginals={netflixOriginals} />
 
         <section className="space-y-12">
-          <NowPlaying nowPlaying={nowPlaying} />
-          <TopRated topRated={topRated} genres={genres} />
-          {/* Watchlist */}
+          <Row title="Trending Now" movies={trendingNow} index={0} />
+          <Row title="Top Rated" movies={topRated} index={1} />
+          <Row title="Action Thrillers" movies={actionMovies} index={2} />
+          <Row title="Comedies" movies={comedyMovies} index={3} />
+          <Row title="Scary Movies" movies={horrorMovies} index={4} />
+          <Row title="Romance Movies" movies={romanceMovies} index={5} />
+          <Row title="Documentaries" movies={documentaries} index={6} />
         </section>
       </main>
+      {showModal && <Modal />}
     </div>
   )
 }
@@ -44,27 +78,36 @@ const Home = ({ trending, nowPlaying, topRated, genres }: Props) => {
 export default Home
 
 export const getServerSideProps = async () => {
-  const [trending, nowPlaying, topRated, genres] = await Promise.all([
-    fetch(
-      `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.API_KEY}`
-    ).then((res) => res.json()),
-    fetch(
-      `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}&language=en-US`
-    ).then((res) => res.json()),
-    fetch(
-      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}&language=en-US`
-    ).then((res) => res.json()),
-    fetch(
-      `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.API_KEY}&language=en-US`
-    ).then((res) => res.json()),
+  const [
+    netflixOriginals,
+    trendingNow,
+    topRated,
+    actionMovies,
+    comedyMovies,
+    horrorMovies,
+    romanceMovies,
+    documentaries,
+  ] = await Promise.all([
+    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
+    fetch(requests.fetchTrending).then((res) => res.json()),
+    fetch(requests.fetchTopRated).then((res) => res.json()),
+    fetch(requests.fetchActionMovies).then((res) => res.json()),
+    fetch(requests.fetchComedyMovies).then((res) => res.json()),
+    fetch(requests.fetchHorrorMovies).then((res) => res.json()),
+    fetch(requests.fetchRomanceMovies).then((res) => res.json()),
+    fetch(requests.fetchDocumentaries).then((res) => res.json()),
   ])
 
   return {
     props: {
-      trending: trending.results,
-      nowPlaying: nowPlaying.results,
+      netflixOriginals: netflixOriginals.results,
+      trendingNow: trendingNow.results,
       topRated: topRated.results,
-      genres: genres.genres,
+      actionMovies: actionMovies.results,
+      comedyMovies: comedyMovies.results,
+      horrorMovies: horrorMovies.results,
+      romanceMovies: romanceMovies.results,
+      documentaries: documentaries.results,
     },
   }
 }
