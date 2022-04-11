@@ -12,7 +12,6 @@ interface Props {
 function Row({ title, movies, index }: Props) {
   const rowRef = useRef<HTMLDivElement>(null)
   const [isMoved, setIsMoved] = useState(false)
-  const [slideNumber, setSlideNumber] = useState(0)
 
   const handleClick = (direction: string) => {
     setIsMoved(true)
@@ -43,7 +42,7 @@ function Row({ title, movies, index }: Props) {
           className="flex items-center space-x-2.5 overflow-x-scroll p-2 scrollbar-hide"
           ref={rowRef}
         >
-          {movies?.map((movie) => (
+          {movies.map((movie) => (
             <Thumbnail key={movie.id} movie={movie} index={index} />
           ))}
         </div>
