@@ -14,7 +14,7 @@ function Thumbnail({ movie, index }: Props) {
 
   return (
     <div
-      className={`relative h-32 min-w-[230px] cursor-pointer transition duration-200 ease-out hover:scale-105`}
+      className={`relative h-36 min-w-[260px] cursor-pointer transition duration-200 ease-out md:hover:scale-105`}
       onClick={() => {
         setCurrentMovie(movie)
         setShowModal(true)

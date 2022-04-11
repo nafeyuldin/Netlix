@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Movie } from '../typings'
 import Thumbnail from './Thumbnail'
 
@@ -11,8 +11,11 @@ interface Props {
 
 function Row({ title, movies, index }: Props) {
   const rowRef = useRef<HTMLDivElement>(null)
+  const [isMoved, setIsMoved] = useState(false)
+  const [slideNumber, setSlideNumber] = useState(0)
 
   const handleClick = (direction: string) => {
+    setIsMoved(true)
     if (rowRef.current) {
       const { scrollLeft, clientWidth } = rowRef.current
 
@@ -25,11 +28,15 @@ function Row({ title, movies, index }: Props) {
   }
 
   return (
-    <div className="h-40 space-y-2">
-      <h2 className="w-56 cursor-pointer text-2xl font-bold">{title}</h2>
+    <div className="h-40 md:space-y-2">
+      <h2 className="w-56 cursor-pointer text-lg font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-2xl">
+        {title}
+      </h2>
       <div className="group relative -ml-2">
         <ChevronLeftIcon
-          className={`absolute top-0 bottom-0 left-2 z-40 m-auto h-9 w-9 cursor-pointer opacity-0 transition hover:scale-125 group-hover:opacity-100`}
+          className={`absolute top-0 bottom-0 left-2 z-40 m-auto h-9 w-9 cursor-pointer opacity-0 transition hover:scale-125 group-hover:opacity-100 ${
+            !isMoved && 'hidden'
+          }`}
           onClick={() => handleClick('left')}
         />
         <div

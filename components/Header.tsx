@@ -24,7 +24,7 @@ function Header() {
   }, [])
 
   return (
-    <header className={`${isScrolled && 'bg-[#0b0b0b] shadow-md'}`}>
+    <header className={`${isScrolled && 'bg-[#141414]'}`}>
       <div className="flex items-center space-x-6">
         <Image
           src="https://rb.gy/ek4j9f"
@@ -32,8 +32,8 @@ function Header() {
           height={70}
           className="cursor-pointer object-contain"
         />
-        <ul className="flex space-x-4">
-          <li className="headerLink cursor-default font-bold text-white hover:text-white">
+        <ul className="hidden space-x-4 lg:flex">
+          <li className="headerLink cursor-default font-semibold text-white hover:text-white">
             Home
           </li>
           <li className="headerLink">TV Shows</li>
@@ -42,9 +42,9 @@ function Header() {
           <li className="headerLink">My List</li>
         </ul>
       </div>
-      <div className="flex items-center space-x-4">
-        <SearchIcon className="h-6 w-6" />
-        <p>Kids</p>
+      <div className="flex items-center space-x-4 text-sm font-light">
+        <SearchIcon className="sm hidden h-6 w-6 sm:inline" />
+        <p className="hidden lg:inline">Kids</p>
         <BellIcon className="h-6 w-6" />
         <Link href="/account">
           <img

@@ -30,7 +30,7 @@ function Login() {
   }
 
   return (
-    <div className="relative flex h-screen w-screen flex-col md:items-center md:justify-center">
+    <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
       <Head>
         <title>Netflix</title>
         <link rel="icon" href="/favicon.ico" />
@@ -55,11 +55,13 @@ function Login() {
             <input
               type="email"
               placeholder="Email"
-              className="input"
+              className={`input ${
+                errors.email && 'border-b-2 border-orange-500'
+              }`}
               {...register('email', { required: true })}
             />
             {errors.email && (
-              <p className="text-sm  text-orange-500">
+              <p className="p-1 text-[13px] font-light  text-orange-500">
                 Please enter a valid email.
               </p>
             )}
@@ -69,10 +71,12 @@ function Login() {
               type="password"
               {...register('password', { required: true })}
               placeholder="Password"
-              className="input"
+              className={`input ${
+                errors.password && 'border-b-2 border-orange-500'
+              }`}
             />
             {errors.password && (
-              <p className="text-sm  text-orange-500">
+              <p className="p-1 text-[13px] font-light  text-orange-500">
                 Your password must contain between 4 and 60 characters.
               </p>
             )}

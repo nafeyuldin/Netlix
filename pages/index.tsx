@@ -1,7 +1,7 @@
 import { getProducts, Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
 import { useRecoilValue } from 'recoil'
-import { modalState } from '../atoms/modalAtom.'
+import { modalState, movieState } from '../atoms/modalAtom.'
 import Banner from '../components/Banner'
 import Header from '../components/Header'
 import Modal from '../components/Modal'
@@ -34,15 +34,18 @@ const Home = ({
   romanceMovies,
   topRated,
   trendingNow,
+  products,
 }: Props) => {
+  console.log(products)
   const { user, loading } = useAuth()
   const subscription = useSubscription(user)
   const showModal = useRecoilValue(modalState)
+  const movie = useRecoilValue(movieState)
 
   if (loading || subscription === null) return null
   console.log(subscription)
 
-  if (!subscription) return <Plans />
+  if (!subscription) return <Plans products={products} />
 
   return (
     <div
@@ -51,16 +54,18 @@ const Home = ({
       }`}
     >
       <Head>
-        <title>Home - Netflix</title>
+        <title>
+          {movie?.title || movie?.original_name || 'Home'} - Netflix
+        </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
 
-      <main className="space-y-20 pl-7 pb-24 lg:pl-12 ">
+      <main className="pl-7 pb-24 lg:space-y-24 lg:pl-16 ">
         <Banner netflixOriginals={netflixOriginals} />
 
-        <section className="space-y-12">
+        <section className="space-y-12 md:space-y-24">
           <Row title="Trending Now" movies={trendingNow} index={0} />
           <Row title="Top Rated" movies={topRated} index={1} />
           <Row title="Action Thrillers" movies={actionMovies} index={2} />
@@ -78,6 +83,13 @@ const Home = ({
 export default Home
 
 export const getServerSideProps = async () => {
+  const products = await getProducts(payments, {
+    includePrices: true,
+    activeOnly: true,
+  })
+    .then((res) => res)
+    .catch((error) => console.log(error.message))
+
   const [
     netflixOriginals,
     trendingNow,
@@ -108,6 +120,7 @@ export const getServerSideProps = async () => {
       horrorMovies: horrorMovies.results,
       romanceMovies: romanceMovies.results,
       documentaries: documentaries.results,
+      products,
     },
   }
 }

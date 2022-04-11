@@ -1,39 +1,21 @@
 import { CheckIcon } from '@heroicons/react/outline'
-import { getProducts, Product } from '@stripe/firestore-stripe-payments'
+import { Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
-import payments, { loadCheckout } from '../lib/stripe'
+import { loadCheckout } from '../lib/stripe'
 import Table from './Table'
+import Loader from './Loader'
 
 interface Props {
   products: Product[]
 }
 
-function Plans() {
-  const [products, setProducts] = useState<Product[]>([])
+function Plans({ products }: Props) {
   const { logout, user } = useAuth()
-  const [selectedPlan, setSelectedPlan] = useState<Product | null>(null)
+  const [selectedPlan, setSelectedPlan] = useState<Product | null>(products[2])
   const [isBillingLoading, setBillingLoading] = useState(false)
-
-  useEffect(() => {
-    if (!user) return
-
-    const getPlans = async () => {
-      await getProducts(payments, {
-        includePrices: true,
-        activeOnly: true,
-      })
-        .then((res) => {
-          setProducts(res)
-          setSelectedPlan(res[2])
-        })
-        .catch((error) => console.log(error.message))
-    }
-
-    getPlans()
-  }, [])
 
   console.log(products)
 
@@ -50,7 +32,7 @@ function Plans() {
         <title>Netflix</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header className={`bg-[#141414]`}>
+      <header className="border-b border-white/10 bg-[#141414]">
         <Link href="/">
           <img
             src="https://rb.gy/ek4j9f"
@@ -68,7 +50,7 @@ function Plans() {
         </button>
       </header>
 
-      <main className="mx-auto max-w-5xl px-5 pt-24 pb-12 transition-all md:px-10">
+      <main className="mx-auto max-w-5xl px-5 pt-28 pb-12 transition-all md:px-10">
         <h1 className="mb-3 text-3xl font-medium">
           Choose the plan that's right for you
         </h1>
@@ -102,20 +84,21 @@ function Plans() {
             ))}
           </div>
 
-          {products.length === 0 ? (
-            'Loading...'
-          ) : (
-            <>
-              <Table products={products} selectedPlan={selectedPlan} />
-              <button
-                disabled={!selectedPlan || isBillingLoading}
-                className="mx-auto w-11/12 rounded bg-[#E50914] py-3.5 text-lg font-semibold shadow hover:bg-[#f6121d] md:w-96"
-                onClick={subscribeToPlan}
-              >
-                Subscribe
-              </button>
-            </>
-          )}
+          <Table products={products} selectedPlan={selectedPlan} />
+
+          <button
+            disabled={!selectedPlan || isBillingLoading}
+            className={`mx-auto w-11/12 rounded bg-[#E50914] py-4 text-xl shadow hover:bg-[#f6121d] md:w-[420px] ${
+              isBillingLoading && 'opacity-60'
+            }`}
+            onClick={subscribeToPlan}
+          >
+            {isBillingLoading ? (
+              <Loader color="dark:fill-gray-300" />
+            ) : (
+              'Subscribe'
+            )}
+          </button>
         </div>
       </main>
     </div>
