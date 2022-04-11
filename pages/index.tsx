@@ -34,6 +34,7 @@ const Home = ({
   romanceMovies,
   topRated,
   trendingNow,
+  products,
 }: Props) => {
   const { user, loading } = useAuth()
   const subscription = useSubscription(user)
@@ -43,7 +44,7 @@ const Home = ({
   if (loading || subscription === null) return null
   console.log(subscription)
 
-  // if (!subscription) return <Plans/>
+  if (!subscription) return <Plans products={products} />
 
   return (
     <div
@@ -61,7 +62,7 @@ const Home = ({
       <Header />
 
       <main className="pl-7 pb-24 lg:space-y-24 lg:pl-16 ">
-        <Banner netflixOriginals={netflixOriginals} />
+        {/* <Banner netflixOriginals={netflixOriginals} /> */}
 
         <section className="space-y-12 md:space-y-24">
           <Row title="Trending Now" movies={trendingNow} index={0} />
@@ -81,12 +82,12 @@ const Home = ({
 export default Home
 
 export const getServerSideProps = async () => {
-  // const products = await getProducts(payments, {
-  //   includePrices: true,
-  //   activeOnly: true,
-  // })
-  //   .then((res) => res)
-  //   .catch((error) => console.log(error.message))
+  const products = await getProducts(payments, {
+    includePrices: true,
+    activeOnly: true,
+  })
+    .then((res) => res)
+    .catch((error) => console.log(error.message))
 
   const [
     netflixOriginals,
@@ -118,7 +119,7 @@ export const getServerSideProps = async () => {
       horrorMovies: horrorMovies.results,
       romanceMovies: romanceMovies.results,
       documentaries: documentaries.results,
-      // products,
+      products,
     },
   }
 }
