@@ -34,9 +34,7 @@ const Home = ({
   romanceMovies,
   topRated,
   trendingNow,
-  products,
 }: Props) => {
-  console.log(products)
   const { user, loading } = useAuth()
   const subscription = useSubscription(user)
   const showModal = useRecoilValue(modalState)
@@ -45,7 +43,7 @@ const Home = ({
   if (loading || subscription === null) return null
   console.log(subscription)
 
-  if (!subscription) return <Plans products={products} />
+  // if (!subscription) return <Plans/>
 
   return (
     <div
@@ -83,12 +81,12 @@ const Home = ({
 export default Home
 
 export const getServerSideProps = async () => {
-  const products = await getProducts(payments, {
-    includePrices: true,
-    activeOnly: true,
-  })
-    .then((res) => res)
-    .catch((error) => console.log(error.message))
+  // const products = await getProducts(payments, {
+  //   includePrices: true,
+  //   activeOnly: true,
+  // })
+  //   .then((res) => res)
+  //   .catch((error) => console.log(error.message))
 
   const [
     netflixOriginals,
@@ -120,7 +118,7 @@ export const getServerSideProps = async () => {
       horrorMovies: horrorMovies.results,
       romanceMovies: romanceMovies.results,
       documentaries: documentaries.results,
-      products,
+      // products,
     },
   }
 }
