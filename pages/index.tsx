@@ -39,6 +39,7 @@ const Home = ({
   const { user, loading } = useAuth()
   const subscription = useSubscription(user)
   const showModal = useRecoilValue(modalState)
+  const movie = useRecoilValue(movieState)
 
   if (loading || subscription === null) return null
   console.log(subscription)
@@ -52,7 +53,9 @@ const Home = ({
       }`}
     >
       <Head>
-        <title>Home - Netflix</title>
+        <title>
+          {movie?.title || movie?.original_name || 'Home'} - Netflix
+        </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -78,7 +81,7 @@ const Home = ({
 
 export default Home
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const products = await getProducts(payments, {
     includePrices: true,
     activeOnly: true,
