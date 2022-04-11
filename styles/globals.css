@@ -22,7 +22,7 @@
   }
 
   .bannerButton {
-    @apply flex items-center gap-x-2 rounded px-6 py-2 text-base font-semibold transition hover:opacity-75 md:py-2.5 md:px-8 md:text-xl;
+    @apply flex items-center gap-x-2 rounded px-5 py-1.5 text-sm font-semibold transition hover:opacity-75 md:py-2.5 md:px-8 md:text-xl;
   }
 
   .modalButton {

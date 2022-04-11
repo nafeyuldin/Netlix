@@ -61,10 +61,10 @@ const Home = ({
 
       <Header />
 
-      <main className="pl-7 pb-24 lg:space-y-24 lg:pl-16 ">
+      <main className="pl-4 pb-24 lg:space-y-24 lg:pl-16 ">
         <Banner netflixOriginals={netflixOriginals} />
 
-        <section className="space-y-12 md:space-y-24">
+        <section className="md:space-y-24">
           <Row title="Trending Now" movies={trendingNow} index={0} />
           <Row title="Top Rated" movies={topRated} index={1} />
           <Row title="Action Thrillers" movies={actionMovies} index={2} />
