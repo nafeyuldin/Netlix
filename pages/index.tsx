@@ -81,7 +81,7 @@ const Home = ({
 
 export default Home
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const products = await getProducts(payments, {
     includePrices: true,
     activeOnly: true,
@@ -89,6 +89,25 @@ export const getStaticProps = async () => {
     .then((res) => res)
     .catch((error) => console.log(error.message))
 
+  const [
+    netflixOriginalsRes,
+    trendingNowRes,
+    topRatedRes,
+    actionMoviesRes,
+    comedyMoviesRes,
+    horrorMoviesRes,
+    romanceMoviesRes,
+    documentariesRes,
+  ] = await Promise.all([
+    fetch(requests.fetchNetflixOriginals),
+    fetch(requests.fetchTrending),
+    fetch(requests.fetchTopRated),
+    fetch(requests.fetchActionMovies),
+    fetch(requests.fetchComedyMovies),
+    fetch(requests.fetchHorrorMovies),
+    fetch(requests.fetchRomanceMovies),
+    fetch(requests.fetchDocumentaries),
+  ])
   const [
     netflixOriginals,
     trendingNow,
@@ -99,14 +118,14 @@ export const getStaticProps = async () => {
     romanceMovies,
     documentaries,
   ] = await Promise.all([
-    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
-    fetch(requests.fetchTrending).then((res) => res.json()),
-    fetch(requests.fetchTopRated).then((res) => res.json()),
-    fetch(requests.fetchActionMovies).then((res) => res.json()),
-    fetch(requests.fetchComedyMovies).then((res) => res.json()),
-    fetch(requests.fetchHorrorMovies).then((res) => res.json()),
-    fetch(requests.fetchRomanceMovies).then((res) => res.json()),
-    fetch(requests.fetchDocumentaries).then((res) => res.json()),
+    netflixOriginalsRes.json(),
+    trendingNowRes.json(),
+    topRatedRes.json(),
+    actionMoviesRes.json(),
+    comedyMoviesRes.json(),
+    horrorMoviesRes.json(),
+    romanceMoviesRes.json(),
+    documentariesRes.json(),
   ])
 
   return {
