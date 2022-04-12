@@ -26,7 +26,7 @@ function Header() {
 
   return (
     <header className={`${isScrolled && 'bg-[#141414]'}`}>
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center md:space-x-6">
         <img
           src="https://rb.gy/ek4j9f"
           width={110}

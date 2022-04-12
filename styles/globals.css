@@ -56,7 +56,7 @@
   }
 
   .menu .MuiPaper-root {
-    @apply !absolute !rounded-none !border !border-[gray] !bg-black !text-white;
+    @apply !absolute !left-0 !rounded-none !border !border-[gray] !bg-black !text-white;
   }
 
   .menu .MuiList-root {
