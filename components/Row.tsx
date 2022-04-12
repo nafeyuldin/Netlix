@@ -1,15 +1,15 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
+import { DocumentData } from 'firebase/firestore'
 import { useEffect, useRef, useState } from 'react'
 import { Movie } from '../typings'
 import Thumbnail from './Thumbnail'
 
 interface Props {
   title: string
-  movies: Movie[]
-  index: number
+  movies: Movie[] | DocumentData[]
 }
 
-function Row({ title, movies, index }: Props) {
+function Row({ title, movies }: Props) {
   const rowRef = useRef<HTMLDivElement>(null)
   const [isMoved, setIsMoved] = useState(false)
 
@@ -43,7 +43,7 @@ function Row({ title, movies, index }: Props) {
           ref={rowRef}
         >
           {movies.map((movie) => (
-            <Thumbnail key={movie.id} movie={movie} index={index} />
+            <Thumbnail key={movie.id} movie={movie} />
           ))}
         </div>
         <ChevronRightIcon

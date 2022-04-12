@@ -5,10 +5,9 @@ import { Movie } from '../typings'
 
 interface Props {
   movie: Movie
-  index: number
 }
 
-function Thumbnail({ movie, index }: Props) {
+function Thumbnail({ movie }: Props) {
   const [currentMovie, setCurrentMovie] = useRecoilState(movieState)
   const [showModal, setShowModal] = useRecoilState(modalState)
 
@@ -21,7 +20,9 @@ function Thumbnail({ movie, index }: Props) {
       }}
     >
       <Image
-        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+        src={`https://image.tmdb.org/t/p/w500${
+          movie.backdrop_path || movie.poster_path
+        }`}
         className="rounded-sm object-cover md:rounded"
         layout="fill"
       />

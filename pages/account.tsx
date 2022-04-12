@@ -1,6 +1,6 @@
 import { getProducts, Product } from '@stripe/firestore-stripe-payments'
 import { GetStaticProps } from 'next'
-import Image from 'next/image'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import Membership from '../components/Membership'
@@ -23,6 +23,10 @@ function Account({ products }: Props) {
   console.log(subscription)
   return (
     <div className="">
+      <Head>
+        <title>Account Settings - Netflix</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <header className={`bg-[#141414]`}>
         <Link href="/">
           <img
@@ -45,7 +49,7 @@ function Account({ products }: Props) {
           <h1 className="text-3xl md:text-4xl">Account</h1>
           <div className="-ml-0.5 flex items-center gap-x-1.5">
             <img src="https://rb.gy/4vfk4r" alt="" className="h-7 w-7" />
-            <p className="text-sm font-bold text-zinc-600">
+            <p className="text-xs font-semibold text-[#555]">
               Member since {subscription?.created}
             </p>
           </div>
