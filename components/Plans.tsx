@@ -35,7 +35,7 @@ function Plans({ products }: Props) {
       <header className="border-b border-white/10 bg-[#141414]">
         <Link href="/">
           <img
-            src="https://rb.gy/ek4j9f"
+            src="https://rb.gy/ulxxee"
             alt="Netflix"
             width={150}
             height={90}
